@@ -1,0 +1,11 @@
+.box {
+  width: 50%;
+  height: auto;
+  border: 1px solid rgba(0,0,0,.12);
+  display: flex;
+}
+
+.weatherContent {
+  display: block;
+  padding: 5px 5px;
+}

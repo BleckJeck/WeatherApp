@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Vue.js Experiment | Weather App</title>
+
+    <link rel="stylesheet" href="styles.css">
+  </head>
+
+  <body>
+    <div id="app">
+      <div id="container">
+        <h1>What's the weather like?</h1>
+        <hr />
+        <div id="currentLocation" class="box">
+          <div>
+            <button v-on:click="toggleTemp()">Toggle °C/°F</button>
+            <p> {{ currentLocation }} </p>
+            <div>
+              <img class="weatherContent" v-bind:src="currWeatherIcon" />
+              <span class="weatherContent">{{ currentWeather }}</span>
+              <span class="weatherContent" v-if="displayCelsius">{{ currTempC }}</span>
+              <span class="weatherContent" v-else>{{ currTempF }}</span>
+            </div>
+          </div>
+        </div>
+        <div id="searchOtherLocation" class="box">
+          <input type="text" placeholder="Search another location" v-model="searchLocation"/>
+          <br />
+          <div v-if="isSearching">
+            <p>Showing weather for {{displayLocation}}</p>
+            <div>
+              <img class="weatherContent" v-bind:src="weatherIcon" />
+              <span class="weatherContent">{{ weatherForLocation }}</span>
+              <span class="weatherContent" v-if="displayCelsius">{{ tempC }}</span>
+              <span class="weatherContent" v-else>{{ tempF }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <script src="https://unpkg.com/vue@2.0.3/dist/vue.js"></script>
+  <script src="https://unpkg.com/axios@0.12.0/dist/axios.min.js"></script>
+  <script src="https://unpkg.com/lodash@4.13.1/lodash.min.js"></script>
+
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        currentLocation: "Looking for you...",
+        currentLatitude: null,
+        currentLongitude: null,
+        searchLocation: '',
+        displayLocation: '',
+        currentWeather: '',
+        weatherForLocation: '',
+        currWeatherIcon: '',
+        weatherIcon: '',
+        currTempC: '',
+        currTempF: '',
+        tempC: '',
+        tempF: '',
+        isSearching: false,
+        displayCelsius: true
+      },
+      watch: {
+        searchLocation: function() {
+          this.displayLocation = this.searchLocation
+          if (this.searchLocation.length > 1) {
+            this.isSearching = true
+            this.getWeather()
+          } else {
+            this.isSearching = false
+          }
+        }
+      },
+      mounted: function() {
+        var vm = this
+        if ('geolocation' in navigator) {
+          navigator.geolocation.getCurrentPosition(function(position){
+            vm.currentLatitude = position.coords.latitude
+            vm.currentLongitude = position.coords.longitude
+            axios.get('http://api.openweathermap.org/data/2.5/weather?lat=' + vm.currentLatitude + '&lon=' + vm.currentLongitude + '&APPID=fbb4562a1c0d9b559f73274031640058')
+            .then(function(response) {
+              vm.currentLocation = "Showing weather for " + response.data.name + ", " + response.data.sys.country
+              vm.currentWeather = response.data.weather[0].description.toUpperCase()
+              vm.currWeatherIcon = 'http://openweathermap.org/img/w/' + response.data.weather[0].icon + '.png'
+              vm.currTempC = Math.round(response.data.main.temp -273.15) + "°C"
+              vm.currTempF = Math.round(9/5 *(response.data.main.temp -273.15) + 32) + "°F"
+            })
+            .catch(function(error){
+              vm.currentLocation = "Our spies couldn't find you! Maybe it's time to stop hiding?"
+            })
+          })
+        } else {
+          vm.currentLocation = "Our spies cannot find you! Maybe it's time to stop hiding?"
+        }
+      },
+      methods: {
+        getWeather: _.debounce(function() {
+          var vm = this
+          axios.get('http://api.openweathermap.org/data/2.5/weather?q=' + vm.searchLocation + '&APPID=fbb4562a1c0d9b559f73274031640058')
+          .then(function(response) {
+            vm.displayLocation = response.data.name + ", " + response.data.sys.country
+            vm.weatherForLocation = response.data.weather[0].description.toUpperCase()
+            vm.weatherIcon = 'http://openweathermap.org/img/w/' + response.data.weather[0].icon + '.png'
+            vm.tempC = Math.round(response.data.main.temp -273.15) + "°C"
+            vm.tempF = Math.round(9/5 *(response.data.main.temp -273.15) + 32) + "°F"
+          })
+          .catch(function(error){
+            vm.displayLocation = 'a probably non-existent place'
+          })
+        }, 500),
+        toggleTemp() {
+          var vm = this
+          vm.displayCelsius = !vm.displayCelsius
+        }
+      }
+    })
+  </script>
+
+</html>
