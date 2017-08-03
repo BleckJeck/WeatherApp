@@ -1,11 +1,19 @@
+body {
+  background-color: lightblue;
+  text-align: center;
+}
+
 .box {
+  margin: auto;
+  margin-top: 5px;
   width: 50%;
-  height: auto;
-  border: 1px solid rgba(0,0,0,.12);
-  display: flex;
+}
+
+.box img {
+  margin: auto;
 }
 
 .weatherContent {
   display: block;
-  padding: 5px 5px;
+  padding: 2px 2px;
 }

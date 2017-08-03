@@ -7,6 +7,8 @@
     <title>Vue.js Experiment | Weather App</title>
 
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
   </head>
 
   <body>
@@ -14,9 +16,9 @@
       <div id="container">
         <h1>What's the weather like?</h1>
         <hr />
-        <div id="currentLocation" class="box">
+        <button v-on:click="toggleTemp()">Toggle °C/°F</button>
+        <div id="currentLocation" class="box well">
           <div>
-            <button v-on:click="toggleTemp()">Toggle °C/°F</button>
             <p> {{ currentLocation }} </p>
             <div>
               <img class="weatherContent" v-bind:src="currWeatherIcon" />
@@ -26,7 +28,7 @@
             </div>
           </div>
         </div>
-        <div id="searchOtherLocation" class="box">
+        <div id="searchOtherLocation" class="box well">
           <input type="text" placeholder="Search another location" v-model="searchLocation"/>
           <br />
           <div v-if="isSearching">
