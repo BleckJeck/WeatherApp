@@ -32,7 +32,7 @@ const app = new Vue({
   },
   mounted: function() {
     var vm = this;
-    var url = 'http://api.openweathermap.org/data/2.5/weather?lat=';
+    var url = 'https://api.openweathermap.org/data/2.5/weather?lat=';
     var auth = '&APPID=fbb4562a1c0d9b559f73274031640058';
     if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition(function(position) {
@@ -42,7 +42,7 @@ const app = new Vue({
           .then(function(response) {
             vm.currentLocation = 'Showing weather for ' + response.data.name + ', ' + response.data.sys.country;
             vm.currentWeather = response.data.weather[0].description.toUpperCase();
-            vm.currWeatherIcon = 'http://openweathermap.org/img/w/' + response.data.weather[0].icon + '.png';
+            vm.currWeatherIcon = 'https://openweathermap.org/img/w/' + response.data.weather[0].icon + '.png';
             vm.currTempC = Math.round(response.data.main.temp - 273.15) + "°C";
             vm.currTempF = Math.round(9 / 5 * (response.data.main.temp - 273.15) + 32) + "°F";
           })
@@ -57,11 +57,11 @@ const app = new Vue({
   methods: {
     getWeather: _.debounce(function() {
       var vm = this;
-      axios.get('http://api.openweathermap.org/data/2.5/weather?q=' + vm.searchLocation + '&APPID=fbb4562a1c0d9b559f73274031640058')
+      axios.get('https://api.openweathermap.org/data/2.5/weather?q=' + vm.searchLocation + '&APPID=fbb4562a1c0d9b559f73274031640058')
         .then(function(response) {
           vm.displayLocation = response.data.name + ", " + response.data.sys.country;
           vm.weatherForLocation = response.data.weather[0].description.toUpperCase();
-          vm.weatherIcon = 'http://openweathermap.org/img/w/' + response.data.weather[0].icon + '.png';
+          vm.weatherIcon = 'https://openweathermap.org/img/w/' + response.data.weather[0].icon + '.png';
           vm.tempC = Math.round(response.data.main.temp - 273.15) + "°C";
           vm.tempF = Math.round(9 / 5 * (response.data.main.temp - 273.15) + 32) + "°F";
         })

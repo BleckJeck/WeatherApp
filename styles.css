@@ -1,19 +1,66 @@
 body {
   background-color: lightblue;
   text-align: center;
+  font-family: 'Dosis', sans-serif;
+}
+
+button {
+  width: 40px;
+  font-size: 16px;
+  background-color: lightblue;
+  padding: 10px;
+  text-decoration: none;
+  border: 2px solid #008CBA;
+  margin: 0px;
+}
+
+button:focus {
+  outline: none;
+}
+
+button:hover {
+  text-shadow: 1px 1px grey;
+}
+
+.active {
+  background-color:#008CBA;
+  color: white;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 15px;
+  grid-auto-rows: minmax(150px, auto);
+  padding: 15px;
 }
 
 .box {
-  margin: auto;
-  margin-top: 5px;
-  width: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+  padding: 15px;
+  border-radius: 5px;
 }
 
-.box img {
+.box span,img,p,input {
   margin: auto;
-}
-
-.weatherContent {
   display: block;
   padding: 2px 2px;
+}
+
+#currentLocation {
+  grid-column: 1 / 3;
+  grid-row: 1;
+}
+
+#searchOtherLocation {
+  grid-column: 3 / 4;
+  grid-row: 1;
+}
+
+#watermark {
+  font-family: Impact;
+  opacity: 0.1;
+  transform: rotate(-10deg);
+  position: relative;
+  top: 20px;
 }
