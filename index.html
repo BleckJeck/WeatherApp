@@ -1,60 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Vue.js Experiment | Weather App</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Dosis">
-  </head>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vue.js Experiment | Weather App</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=BenchNine:300">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/1.3.2/css/weather-icons.min.css">
+</head>
 
-  <body>
-    <div id="app">
-      <div id="container">
-        <div id="header">
-          <h1>What's the weather like?</h1>
-          <div id="tempButtons">
-            <button v-on:click="toggleTemp()" v-bind:class="{active: displayCelsius}">C</button><button v-on:click="toggleTemp()" v-bind:class="{active: !displayCelsius}">F</button>
+<body>
+  <div id="app">
+    <div id="container">
+      <h1><i class="wi wi-horizon-alt"></i> WEATHER APP <i class="wi wi-umbrella"></i></h1>
+      <div class="wrapper">
+        <div id="currentLocation" class="box" v-if="isCurrent">
+          <div id="location"> {{ currentLocation }} </div>
+          <div id="buttons"><button id="degC" v-on:click="toggleTemp()" v-bind:class="{active: displayCelsius}">C</button><button class="btn" id="degF" v-on:click="toggleTemp()" v-bind:class="{active: !displayCelsius}">F</button>
           </div>
+          <div id="date"> {{ Date() }}</div>
+          <div id="img"><i v-bind:class="currWeatherIcon"></i></div>
+          <div id="temp">
+            <span v-if="displayCelsius">{{ currTempC }}</span>
+            <span v-else>{{ currTempF }}</span>
+          </div>
+          <div id="text"> {{ currentWeather }} </div>
         </div>
-        <hr />
-        <div class="wrapper">
-        <div id="currentLocation" class="box">
-          <div>
-            <p> {{ currentLocation }} </p>
-            <div>
-              <img class="weatherContent" v-bind:src="currWeatherIcon" />
-              <span class="weatherContent">{{ currentWeather }}</span>
-              <span class="weatherContent" v-if="displayCelsius">{{ currTempC }}</span>
-              <span class="weatherContent" v-else>{{ currTempF }}</span>
-            </div>
+        <div id="searchOtherLocation" class="box" v-else>
+          <input id="searchBar" type="text" placeholder="Explore the world!" v-model="searchLocation" v-on:click="reset()" />
+          <div id="searchedLocation" v-if="isSearching"> {{displayLocation}} </div>
+          <div id="buttons" v-if="isSearching"><button id="degC" v-on:click="toggleTemp()" v-bind:class="{active: displayCelsius}">C</button><button class="btn" id="degF" v-on:click="toggleTemp()" v-bind:class="{active: !displayCelsius}">F</button>
           </div>
+          <div id="img" v-if="isSearching"><i v-bind:class="weatherIcon"></i></div>
+          <div id="temp" v-if="isSearching">
+            <span v-if="displayCelsius">{{ tempC }}</span>
+            <span v-else>{{ tempF }}</span>
+          </div>
+          <div id="text" v-if="isSearching"> {{ weatherForLocation }} </div>
         </div>
-        <div id="searchOtherLocation" class="box">
-          <input type="text" placeholder="Explore the world!" v-model="searchLocation"/>
-          <br />
-          <div v-if="isSearching">
-            <p>Showing weather for {{displayLocation}}</p>
-            <div>
-              <img class="weatherContent" v-bind:src="weatherIcon" />
-              <span class="weatherContent">{{ weatherForLocation }}</span>
-              <span class="weatherContent" v-if="displayCelsius">{{ tempC }}</span>
-              <span class="weatherContent" v-else>{{ tempF }}</span>
-            </div>
-          </div>
-          <div v-else>
-            <p id="watermark">SEARCH FOR ANOTHER LOCATION</p>
-          </div>
-        </div>
-      </div>
+        <button id="changeView" v-on:click="toggleView()" v-if="isCurrent">SEARCH OTHER LOCATIONS</button>
+        <button id="changeView" v-on:click="toggleView()" v-else>BACK TO CURRENT LOCATION</button>
       </div>
     </div>
-  </body>
+  </div>
+</body>
 
-  <script src="https://unpkg.com/vue@2.0.3/dist/vue.js"></script>
-  <script src="https://unpkg.com/axios@0.12.0/dist/axios.min.js"></script>
-  <script src="https://unpkg.com/lodash@4.13.1/lodash.min.js"></script>
-  <script src="vueApp.js"></script>
+<script src="https://unpkg.com/vue@2.0.3/dist/vue.js"></script>
+<script src="https://unpkg.com/axios@0.12.0/dist/axios.min.js"></script>
+<script src="https://unpkg.com/lodash@4.13.1/lodash.min.js"></script>
+<script src="vueApp.js"></script>
 
 </html>
